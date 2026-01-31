@@ -1,0 +1,17 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#divContainer {
+    width: 800px;
+    height: 800px;
+    border-style: solid;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.pixel:hover {
+    background-color: palegreen;
+}
