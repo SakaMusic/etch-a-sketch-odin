@@ -7,7 +7,8 @@ const colorContainer = document.querySelector('#colorContainer');
 const rainbowButton = document.querySelector("#rainbow");
 let rowAndCol = 16;
 let currentColor = 'black';
-let isRainbow = false
+let isRainbow = false;
+let isEraser = false;
 
 let isMouseDown = false;
 document.body.addEventListener('mousedown', () => {
@@ -41,12 +42,12 @@ buttonContainer.addEventListener('click', event => {
 });
 
 colorContainer.addEventListener('click', event => {
-    // if (!event.target.classList.contains('.color-button')) return;
 
         const colorButtonID = event.target.id;
         switch (colorButtonID) {
             case 'rainbow':
                 isRainbow = true;
+                isEraser = false;
                 return;
             case 'red':
                 currentColor = 'red';
@@ -70,16 +71,19 @@ colorContainer.addEventListener('click', event => {
                 currentColor = 'black';
                 break;
             case 'white':
-                currentColor = 'white'
-                break
+                isEraser = true;
+                isRainbow = false;
+                return
         }
-        isRainbow = false
-    
+        isRainbow = false;
+        isEraser = false;
 })
 
 
 function createDiv() {
     let div = document.createElement('div');
+    div.dataset.opacity = 0;
+    div.dataset.color = currentColor;
     div.style.height = `${gridHeight/rowAndCol}px`;
     div.style.width = `${gridWidth/rowAndCol}px`;
     div.style.border = '0px';
@@ -108,19 +112,57 @@ function createPixels() {
     pixels = pixels * pixels;
 
     for (let i = 0; i < pixels; i++) {
-        divContainer.append(createDiv())
+        divContainer.append(createDiv());
 }
 }
 
 function colorDiv(element) {
+    let opacity = parseFloat(element.dataset.opacity);
+    let pixelColor = element.dataset.color;
+    if (pixelColor != currentColor) {
+        element.dataset.opacity = 0;
+        opacity = element.dataset.opacity;
+        element.style.opacity = 0;
+        element.dataset.color = currentColor;
+    }
     if (isRainbow) {
+        opacity = 1.0;
         element.style.backgroundColor = getRainbowColor()
+    } else if (isEraser) {
+        opacity = subtractOpacity(opacity)
     } else {
+        opacity = addOpacity(opacity);
+
         element.style.backgroundColor = currentColor;
+        
+    }
+    element.dataset.opacity = opacity;
+    element.style.opacity = element.dataset.opacity;
+}
+
+function addOpacity(currentOpacity) {
+    if (currentOpacity >= 1.0) {
+        return currentOpacity;
+    } else {
+        return Math.min(1, currentOpacity + 0.1);
     }
 }
 
+function subtractOpacity(currentOpacity) {
+    if (currentOpacity <= 0) {
+        return currentOpacity;
+    } else {
+        return Math.min(1, currentOpacity - 0.1);
+    }
+}
 
+function resetAllOpacity() {
+    pixels = document.querySelectorAll('.pixel');
+    pixels.forEach(pixel => {
+        pixel.style.opacity = 0;
+        pixel.dataset.opacity = 0;
+    });
+}
 // generate random num between 1 and 7 (for using wtih rainbow option)
 function getRandomInt() {
     return Math.floor(Math.random() * 7) + 1;
