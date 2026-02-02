@@ -118,8 +118,8 @@ function colorDiv(element) {
     } else {
         element.style.backgroundColor = currentColor;
     }
-    
 }
+
 
 // generate random num between 1 and 7 (for using wtih rainbow option)
 function getRandomInt() {
