@@ -5,8 +5,8 @@ body {
 }
 
 #divContainer {
-    width: 800px;
-    height: 800px;
+    width: 700px;
+    height: 700px;
     border-style: solid;
     display: flex;
     flex-wrap: wrap;

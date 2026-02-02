@@ -1,11 +1,13 @@
-const gridHeight = 800;
-const gridWidth = 800;
+const gridHeight = 700;
+const gridWidth = 700;
 
 const divContainer = document.querySelector("#divContainer");
 const buttonContainer = document.querySelector("#buttonContainer");
 const colorContainer = document.querySelector('#colorContainer');
+const rainbowButton = document.querySelector("#rainbow");
 let rowAndCol = 16;
 let currentColor = 'black';
+let isRainbow = false
 
 let isMouseDown = false;
 document.body.addEventListener('mousedown', () => {
@@ -40,34 +42,41 @@ buttonContainer.addEventListener('click', event => {
 
 colorContainer.addEventListener('click', event => {
     // if (!event.target.classList.contains('.color-button')) return;
-    const colorButtonID = event.target.id;
-    switch (colorButtonID) {
-        case 'red':
-            currentColor = 'red';
-            break;
-        case 'green':
-            currentColor = 'green';
-            break;
-        case 'blue':
-            currentColor = 'blue';
-            break;
-        case 'yellow':
-            currentColor = 'yellow';
-            break;
-        case 'orange':
-            currentColor = 'orange';
-            break;
-        case 'purple':
-            currentColor = 'purple';
-            break;
-        case 'black':
-            currentColor = 'black';
-            break;
-        case 'white':
-            currentColor = 'white'
-            break
-    }
+
+        const colorButtonID = event.target.id;
+        switch (colorButtonID) {
+            case 'rainbow':
+                isRainbow = true;
+                return;
+            case 'red':
+                currentColor = 'red';
+                break;
+            case 'green':
+                currentColor = 'green';
+                break;
+            case 'blue':
+                currentColor = 'blue';
+                break;
+            case 'yellow':
+                currentColor = 'yellow';
+                break;
+            case 'orange':
+                currentColor = 'orange';
+                break;
+            case 'purple':
+                currentColor = 'purple';
+                break;
+            case 'black':
+                currentColor = 'black';
+                break;
+            case 'white':
+                currentColor = 'white'
+                break
+        }
+        isRainbow = false
+    
 })
+
 
 function createDiv() {
     let div = document.createElement('div');
@@ -98,11 +107,40 @@ function createPixels() {
     let pixels = rowAndCol;
     pixels = pixels * pixels;
 
-    for (i = 0; i < pixels; i++) {
+    for (let i = 0; i < pixels; i++) {
         divContainer.append(createDiv())
 }
 }
 
 function colorDiv(element) {
-    element.style.backgroundColor = currentColor;
+    if (isRainbow) {
+        element.style.backgroundColor = getRainbowColor()
+    } else {
+        element.style.backgroundColor = currentColor;
+    }
+    
+}
+
+// generate random num between 1 and 7 (for using wtih rainbow option)
+function getRandomInt() {
+    return Math.floor(Math.random() * 7) + 1;
+}
+
+function getRainbowColor() {
+    switch(getRandomInt()) {
+        case 1:
+            return'red';
+        case 2:
+            return 'orange';
+        case 3:
+            return'yellow';
+        case 4:
+            return 'green';
+        case 5:
+            return 'blue';
+        case 6:
+            return 'indigo';
+        case 7:
+            return 'violet';
+    }
 }
